@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Guess the Number!</title>
+        <link href="./output.css" rel="stylesheet" />
+    </head>
+    <body class="bg-slate-300 flex justify-center items-center h-[100vh]">
+        <div class="container flex items-center justify-center flex-col gap-5">
+            <h1 class="text-center text-5xl">Guess the Number</h1>
+            <div class="flex gap-5">
+                <div class="flex flex-col gap-2">
+                    <p class="text-center text-sm">Answer</p>
+                    <div
+                        class="answer w-20 h-20 bg-gray-500 flex items-center justify-center text-4xl text-white rounded-md"
+                    >
+                        ?
+                    </div>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <p class="text-center text-sm">Your Guess</p>
+                    <div
+                        class="myGuess w-20 h-20 bg-gray-500 flex items-center justify-center text-4xl text-white rounded-md"
+                    >
+                        ---
+                    </div>
+                </div>
+            </div>
+            <p class="playAgain hidden text-lg">
+                Congratulations! Reload this page play to again.
+            </p>
+            <form>
+                <input
+                    class="border px-3 py-3 w-96 rounded-lg"
+                    type="number"
+                    placeholder="Enter a number"
+                    min="1"
+                    max="100"
+                    required
+                />
+                <button class="bg-blue-400 p-3 w-28 rounded-lg text-white">
+                    Guess
+                </button>
+            </form>
+
+            <div class="flex gap-5">
+                <p>Legends:</p>
+                <div>
+                    <div class="bg-green-500 w-14 h-2"></div>
+                    <p class="text-center text-xs">Correct</p>
+                </div>
+                <div>
+                    <div class="bg-red-500 w-14 h-2"></div>
+                    <p class="text-center text-xs">Lower</p>
+                </div>
+                <div>
+                    <div class="bg-orange-500 w-14 h-2"></div>
+                    <p class="text-center text-xs">Higher</p>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const input = document.querySelector("input");
+            const button = document.querySelector("button");
+            const form = document.querySelector("form");
+            const answer = document.querySelector(".answer");
+            const myGuess = document.querySelector(".myGuess");
+            const playAgain = document.querySelector(".playAgain");
+            const randomNumber = Math.floor(Math.random() * (100 - 1 + 1) + 1);
+            const colors = {
+                correct: "bg-green-500",
+                lower: "bg-red-500",
+                higher: "bg-orange-500",
+            };
+
+            form.addEventListener("submit", function (e) {
+                // Prevent the page to reload
+                e.preventDefault();
+
+                //Get user input
+                const userInput = input.value;
+
+                if (userInput > randomNumber) {
+                    guessController("lower");
+                } else if (userInput < randomNumber) {
+                    guessController("higher");
+                } else {
+                    guessController("correct");
+                    button.setAttribute("disabled", true);
+                    form.classList.add("hidden");
+
+                    playAgain.classList.remove("hidden");
+                    playAgain.classList.add("block");
+                }
+
+                //Clears the previous value
+                input.value = "";
+                input.focus();
+
+                function guessController(result) {
+                    myGuess.classList.remove("bg-orange-500", "bg-red-500");
+                    if (result === "correct") {
+                        answer.classList.add(colors[result]);
+                        answer.innerText = randomNumber;
+                        myGuess.classList.add(colors[result]);
+                        myGuess.innerText = userInput;
+                    } else {
+                        myGuess.classList.add(colors[result]);
+                        myGuess.innerText = userInput;
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>
